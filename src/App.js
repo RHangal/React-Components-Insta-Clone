@@ -17,8 +17,19 @@ const App = () => {
   // Create a state called `posts` to hold the array of post objects, **initializing to dummyData**.
   // This state is the source of truth for the data inside the app. You won't be needing dummyData anymore.
   // To make the search bar work (which is stretch) we'd need another state to hold the search term.
+
   const [posts, setPosts] = useState(dummyData)
   const [hearted, setHearted] = useState(false)
+  const [searchterm, setSearchTerm] = useState("")
+
+
+  const getFilteredPosts = () => {
+    const termNormalized = searchterm.trim().toLowerCase();
+    if(!termNormalized) return posts;
+    console.log(termNormalized)
+    return posts.filter(post => {return post.username.toLowerCase().includes(termNormalized)});
+  }
+
   const likePost = postId => {
     /*
       This function serves the purpose of increasing the number of likes by one, of the post with a given id.
@@ -26,8 +37,8 @@ const App = () => {
       The state of the app lives at the top of the React tree, but it wouldn't be fair for nested components not to be able to change state!
       This function is passed down to nested components through props, allowing them to increase the number of likes of a given post.
     */
-      setHearted(hearted === false ? true : false)
-      setPosts(posts.map(post => post.id === postId && hearted === false ? {...post, likes: post.likes+1} : {...post, likes: post.id === postId ? post.likes-1 : post.likes }))
+      setHearted(hearted === false ? true : false);
+      setPosts(posts.map(post => post.id === postId && hearted === false ? {...post, likes: post.likes+1} : {...post, likes: post.id === postId ? post.likes-1 : post.likes }));
     /*  Invoke `setPosts` and pass as the new state the invocation of `posts.map`.
       The callback passed into `map` performs the following logic:
         - if the `id` of the post matches `postId`, return a new post object with the desired values (use the spread operator).
@@ -38,8 +49,8 @@ const App = () => {
   return (
     <div className='App'>
       {/* Add SearchBar and Posts here to render them */}
-    <SearchBar />
-    <Posts posts={posts} likePost={likePost} />
+    <SearchBar setSearchTerm={setSearchTerm}/>
+    <Posts posts={getFilteredPosts()} likePost={likePost} />
       {/* Check the implementation of each component, to see what props they require, if any! */}
     </div>
   );
