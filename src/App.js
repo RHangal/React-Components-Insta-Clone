@@ -18,7 +18,7 @@ const App = () => {
   // This state is the source of truth for the data inside the app. You won't be needing dummyData anymore.
   // To make the search bar work (which is stretch) we'd need another state to hold the search term.
   const [posts, setPosts] = useState(dummyData)
-
+  const [hearted, setHearted] = useState(false)
   const likePost = postId => {
     /*
       This function serves the purpose of increasing the number of likes by one, of the post with a given id.
@@ -26,8 +26,8 @@ const App = () => {
       The state of the app lives at the top of the React tree, but it wouldn't be fair for nested components not to be able to change state!
       This function is passed down to nested components through props, allowing them to increase the number of likes of a given post.
     */
-
-      setPosts(posts.map(post => post.id === postId ? {...post, likes: post.likes+1} : post))
+      setHearted(hearted === false ? true : false)
+      setPosts(posts.map(post => post.id === postId && hearted === false ? {...post, likes: post.likes+1} : {...post, likes: post.id === postId ? post.likes-1 : post.likes }))
     /*  Invoke `setPosts` and pass as the new state the invocation of `posts.map`.
       The callback passed into `map` performs the following logic:
         - if the `id` of the post matches `postId`, return a new post object with the desired values (use the spread operator).

@@ -6,10 +6,10 @@ import PostHeader from './PostHeader';
 
 const Post = props => {
   // 🔥 Make sure the parent of Post is passing the right props!
-  const { post, likePost } = props;
+  const { post, likePost} = props;
   console.log(post)
   return (
-    <div className='post-border'>
+    <div className={`post-border`} >
       <PostHeader
         username={post.username}
         thumbnailUrl={post.thumbnailUrl}
